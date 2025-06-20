@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 interface Props {
   item: {
@@ -11,11 +11,14 @@ interface Props {
 
 const GoalItem = ({ item, removeItem }: Props) => {
   return (
-    <View key={item.key} style={styles.goalItems}>
-      <Text style={styles.goalText}>{item.text}</Text>
-      <Text style={styles.goalCross} onPress={() => removeItem(item.key)}>
-        X
-      </Text>
+    <View key={item.key} style={styles.goalItem}>
+      <Pressable
+        android_ripple={{ color: "#dddddd" }}
+        onPress={() => removeItem(item.key)}
+        style={({ pressed }) => pressed && styles.pressedItem}
+      >
+        <Text style={styles.goalText}>{item.text}</Text>
+      </Pressable>
     </View>
   );
 };
@@ -23,26 +26,21 @@ const GoalItem = ({ item, removeItem }: Props) => {
 export default GoalItem;
 
 const styles = StyleSheet.create({
-  goalItems: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+  goalItem: {
     fontSize: 20,
     backgroundColor: "#530acc",
     margin: 8,
     borderColor: "black",
     borderWidth: 1,
-    padding: 20,
     borderRadius: 20,
+    overflow: "hidden",
+  },
+  pressedItem: {
+    opacity: 0.5,
   },
 
   goalText: {
+    padding: 20,
     color: "white",
-  },
-
-  goalCross: {
-    color: "white",
-    position: "absolute",
-    right: 20,
-    top: 10,
   },
 });

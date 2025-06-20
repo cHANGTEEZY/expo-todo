@@ -1,9 +1,16 @@
 import GoalInput from "@/components/GoalInput";
 import GoalItem from "@/components/GoalItem";
 import React, { useState } from "react";
-import { FlatList, StyleSheet, useColorScheme, View } from "react-native";
+import {
+  Button,
+  FlatList,
+  StyleSheet,
+  useColorScheme,
+  View,
+} from "react-native";
 
 const App = () => {
+  const [modalIsVisible, setIsModalIsVisible] = useState<boolean>(false);
   const [enteredText, setEnteredText] = useState<string>("");
   const [courseGoals, setCourseGoals] = useState<
     {
@@ -13,6 +20,10 @@ const App = () => {
   >([]);
 
   const colorScheme = useColorScheme() as "light" | "dark" | undefined;
+
+  function showModal() {
+    setIsModalIsVisible((prev) => !prev);
+  }
 
   function goalInputHandler(textInput: string) {
     setEnteredText(textInput);
@@ -26,6 +37,7 @@ const App = () => {
       ]);
       setEnteredText("");
     }
+    setIsModalIsVisible(false);
   }
 
   function removeGoalHandler(key: string) {
@@ -36,14 +48,23 @@ const App = () => {
 
   return (
     <View style={styles.appContainer}>
-      <View style={styles.inputContainer}>
+      <View
+        style={{
+          margin: 20,
+        }}
+      >
+        <Button title="Add new Goal" color={"green"} onPress={showModal} />
+      </View>
+      {modalIsVisible && (
         <GoalInput
+          visible={modalIsVisible}
+          closeModal={showModal}
           colorScheme={colorScheme}
           enteredText={enteredText}
           goalInputHandler={goalInputHandler}
           addGoalHandler={addGoalHandler}
         />
-      </View>
+      )}
       <View style={styles.goalsContainer}>
         <FlatList
           data={courseGoals}
@@ -64,16 +85,6 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     paddingHorizontal: 16,
     flex: 1,
-  },
-
-  inputContainer: {
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 24,
-    borderBottomWidth: 1,
-    borderBottomColor: "#cccccc",
   },
 
   textInput: {
