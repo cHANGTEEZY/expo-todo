@@ -1,13 +1,7 @@
+import GoalInput from "@/components/GoalInput";
+import GoalItem from "@/components/GoalItem";
 import React, { useState } from "react";
-import {
-  Button,
-  FlatList,
-  StyleSheet,
-  Text,
-  TextInput,
-  useColorScheme,
-  View,
-} from "react-native";
+import { FlatList, StyleSheet, useColorScheme, View } from "react-native";
 
 const App = () => {
   const [enteredText, setEnteredText] = useState<string>("");
@@ -18,7 +12,7 @@ const App = () => {
     }[]
   >([]);
 
-  const colorScheme = useColorScheme();
+  const colorScheme = useColorScheme() as "light" | "dark" | undefined;
 
   function goalInputHandler(textInput: string) {
     setEnteredText(textInput);
@@ -43,32 +37,18 @@ const App = () => {
   return (
     <View style={styles.appContainer}>
       <View style={styles.inputContainer}>
-        <TextInput
-          style={[
-            styles.textInput,
-            {
-              color: colorScheme === "dark" ? "white" : "dark",
-            },
-          ]}
-          placeholder="Your course goal"
-          onChangeText={goalInputHandler}
-          value={enteredText}
+        <GoalInput
+          colorScheme={colorScheme}
+          enteredText={enteredText}
+          goalInputHandler={goalInputHandler}
+          addGoalHandler={addGoalHandler}
         />
-        <Button title="Add goal" onPress={addGoalHandler} />
       </View>
       <View style={styles.goalsContainer}>
         <FlatList
           data={courseGoals}
           renderItem={({ item }) => (
-            <View key={item.key} style={styles.goalItems}>
-              <Text style={styles.goalText}>{item.text}</Text>
-              <Text
-                style={styles.goalCross}
-                onPress={() => removeGoalHandler(item.key)}
-              >
-                X
-              </Text>
-            </View>
+            <GoalItem item={item} removeItem={removeGoalHandler} />
           )}
           keyExtractor={(item) => item.key}
         />
@@ -107,28 +87,5 @@ const styles = StyleSheet.create({
   goalsContainer: {
     flex: 5,
     marginBottom: 20,
-  },
-
-  goalItems: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    fontSize: 20,
-    backgroundColor: "#530acc",
-    margin: 8,
-    borderColor: "black",
-    borderWidth: 1,
-    padding: 20,
-    borderRadius: 20,
-  },
-
-  goalText: {
-    color: "white",
-  },
-
-  goalCross: {
-    color: "white",
-    position: "absolute",
-    right: 20,
-    top: 10,
   },
 });
