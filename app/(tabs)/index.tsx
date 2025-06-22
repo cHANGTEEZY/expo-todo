@@ -1,5 +1,6 @@
 import GoalInput from "@/components/GoalInput";
 import GoalItem from "@/components/GoalItem";
+import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import {
   Button,
@@ -47,34 +48,37 @@ const App = () => {
   }
 
   return (
-    <View style={styles.appContainer}>
-      <View
-        style={{
-          margin: 20,
-        }}
-      >
-        <Button title="Add new Goal" color={"green"} onPress={showModal} />
+    <>
+      <StatusBar style="light" />
+      <View style={styles.appContainer}>
+        <View
+          style={{
+            margin: 20,
+          }}
+        >
+          <Button title="Add new Goal" color={"purple"} onPress={showModal} />
+        </View>
+        {modalIsVisible && (
+          <GoalInput
+            visible={modalIsVisible}
+            closeModal={showModal}
+            colorScheme={colorScheme}
+            enteredText={enteredText}
+            goalInputHandler={goalInputHandler}
+            addGoalHandler={addGoalHandler}
+          />
+        )}
+        <View style={styles.goalsContainer}>
+          <FlatList
+            data={courseGoals}
+            renderItem={({ item }) => (
+              <GoalItem item={item} removeItem={removeGoalHandler} />
+            )}
+            keyExtractor={(item) => item.key}
+          />
+        </View>
       </View>
-      {modalIsVisible && (
-        <GoalInput
-          visible={modalIsVisible}
-          closeModal={showModal}
-          colorScheme={colorScheme}
-          enteredText={enteredText}
-          goalInputHandler={goalInputHandler}
-          addGoalHandler={addGoalHandler}
-        />
-      )}
-      <View style={styles.goalsContainer}>
-        <FlatList
-          data={courseGoals}
-          renderItem={({ item }) => (
-            <GoalItem item={item} removeItem={removeGoalHandler} />
-          )}
-          keyExtractor={(item) => item.key}
-        />
-      </View>
-    </View>
+    </>
   );
 };
 
@@ -85,6 +89,7 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     paddingHorizontal: 16,
     flex: 1,
+    backgroundColor: "#1e085a",
   },
 
   textInput: {

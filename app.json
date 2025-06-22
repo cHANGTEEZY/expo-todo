@@ -4,6 +4,7 @@
     "slug": "first-project",
     "version": "1.0.0",
     "orientation": "portrait",
+    "backgroundColor": "#1e085a",
     "icon": "./assets/images/icon.png",
     "scheme": "firstproject",
     "userInterfaceStyle": "automatic",
